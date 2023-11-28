@@ -41,7 +41,7 @@ def main():
         st.markdown("### Main Text")
         display_text(main_text_data)
 
-        st.markdown("### Data Text")
+        st.markdown("### Data Text", unsafe_allow_html=true, *, help=None)
         selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text_data))])
         display_text(data_text_data[int(selected_file.split()[-1]) - 1])
 
