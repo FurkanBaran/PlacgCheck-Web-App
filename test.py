@@ -71,11 +71,14 @@ def preprocess_data_text(data_text_files):
     return data_text
 
 def display_text(text):
+    colored_text = ""
     for word_info in text:
         if word_info['isPlagiarism']:
-            st.markdown(f"<font color='red'>{word_info['word']}</font> ", unsafe_allow_html=True)
+            colored_text += f"<font color='red'>{word_info['word']}</font> "
         else:
-            st.text(word_info['word'] + (" " if not word_info['isNewLine'] else "\n"))
+            colored_text += word_info['word'] + (" " if not word_info['isNewLine'] else "<br>")
+
+    st.markdown(colored_text, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
