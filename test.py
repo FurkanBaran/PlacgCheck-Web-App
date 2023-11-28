@@ -38,16 +38,12 @@ def main():
 
         main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
 
-        col1, col2 = st.beta_columns(2)
-        
-        with col1:
-            st.markdown("### Main Text")
-            display_text(main_text_data)
+        st.markdown("### Main Text")
+        display_text(main_text_data)
 
-        with col2:
-            selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text_data))])
-            st.markdown(f"### Data Text ({selected_file})")
-            display_text(data_text_data[int(selected_file.split()[-1]) - 1])
+        st.markdown("### Data Text")
+        selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text_data))])
+        display_text(data_text_data[int(selected_file.split()[-1]) - 1])
 
 def preprocess_text(text_content):
     text_lines = text_content.split('\n')
