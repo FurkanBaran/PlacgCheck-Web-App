@@ -42,10 +42,12 @@ def check_and_display(main_text_content, data_text_files, n):
 
     main_text, data_text = check_plagiarism(main_text, data_text, n)
 
-    st.text_area("Checked Main Text", display_text(main_text), height=300)
+    st.markdown("### Checked Main Text")
+    display_text(main_text)
 
     selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text))])
-    st.text_area(f"Checked Data Text ({selected_file})", display_text(data_text[int(selected_file.split()[-1]) - 1]), height=300)
+    st.markdown(f"### Checked Data Text ({selected_file})")
+    display_text(data_text[int(selected_file.split()[-1]) - 1])
 
 def preprocess_text(text_content):
     text_lines = text_content.split('\n')
@@ -69,13 +71,11 @@ def preprocess_data_text(data_text_files):
     return data_text
 
 def display_text(text):
-    result = ""
     for word_info in text:
         if word_info['isPlagiarism']:
-            result += f"[{word_info['word']}] "
+            st.markdown(f"<font color='red'>{word_info['word']}</font> ", unsafe_allow_html=True)
         else:
-            result += word_info['word'] + (" " if not word_info['isNewLine'] else "\n")
-    return result
+            st.text(word_info['word'] + (" " if not word_info['isNewLine'] else "\n"))
 
 if __name__ == "__main__":
     main()
