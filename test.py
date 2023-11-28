@@ -1,62 +1,80 @@
 import streamlit as st
+import pandas as pd
 import string
 
-def check_plagiarism(text, db_text, n):
+def check_plagiarism(main_text, data_text, n):
     check_text = []
     plag_count = 0
 
     for i in range(n - 1):
-        check_text.append(text[i])
+        check_text.append(main_text[i])
 
-    text_len = len(text)
+    main_text_len = len(main_text)
 
-    for id in range(text_len - n):
-        check_text.append(text[id + n])
-        for file_id in range(len(db_text)):
-            for j in range(len(db_text[file_id]) - n):
-                if check_text == db_text[file_id][j:j + n]:
+    for id in range(main_text_len - n):
+        check_text.append(main_text[id + n])
+        for file_id in range(len(data_text)):
+            for j in range(len(data_text[file_id]) - n):
+                if check_text == data_text[file_id][j:j + n]:
                     for k in range(n):
-                        text[id + k]['isPlagiarism'] = True
-                        db_text[file_id][j + k]['isPlagiarism'] = 1
+                        main_text[id + k]['isPlagiarism'] = True
+                        data_text[file_id][j + k]['isPlagiarism'] = True
         check_text.pop(0)
 
-    return text
+    return main_text, data_text
 
 def main():
     st.title("Plagiarism Checker")
 
-    uploaded_file = st.file_uploader("Upload your text file", type=["txt"])
+    main_text = st.file_uploader("Upload Main Text File", type=["txt"])
+    data_text_files = st.file_uploader("Upload Data Text Files", type=["txt"], accept_multiple_files=True)
 
-    if uploaded_file is not None:
-        content = uploaded_file.read().decode("utf-8")
-        st.text_area("Selected Document", content, height=300)
+    if main_text is not None and data_text_files is not None:
+        main_text_content = main_text.read().decode("utf-8")
+        st.text_area("Main Text", main_text_content, height=300)
 
         n = st.slider("Select Level (N)", min_value=3, max_value=7, value=3)
-        st.button("Check Plagiarism", on_click=lambda: check_and_display(content, n))
+        st.button("Check Plagiarism", on_click=lambda: check_and_display(main_text_content, data_text_files, n))
 
-def check_and_display(text_content, n):
-    text = preprocess_text(text_content)
-    db_text = preprocess_db_text()  # You need to implement the function that loads your database text
+def check_and_display(main_text_content, data_text_files, n):
+    main_text = preprocess_text(main_text_content)
+    data_text = preprocess_data_text(data_text_files)
 
-    text = check_plagiarism(text, db_text, n)
+    main_text, data_text = check_plagiarism(main_text, data_text, n)
 
-    st.text_area("Checked Document", display_text(text), height=300)
+    st.text_area("Checked Main Text", display_text(main_text), height=300)
+
+    selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text))])
+    st.text_area(f"Checked Data Text ({selected_file})", display_text(data_text[int(selected_file.split()[-1]) - 1]), height=300)
 
 def preprocess_text(text_content):
     text_lines = text_content.split('\n')
-    text = []
+    main_text = []
 
     for line in text_lines:
         for word in line.split():
-            text.append({'word': word, 'isPlagiarism': False, 'isNewLine': True})
-            text[-1]['word'] = word.translate(str.maketrans('', '', string.punctuation)).lower()
+            main_text.append({'word': word, 'isPlagiarism': False, 'isNewLine': True})
+            main_text[-1]['word'] = word.translate(str.maketrans('', '', string.punctuation)).lower()
 
-    return text
+    return main_text
+
+def preprocess_data_text(data_text_files):
+    data_text = []
+
+    for file_id, file in enumerate(data_text_files):
+        content = file.read().decode("utf-8")
+        file_text = preprocess_text(content)
+        data_text.append(file_text)
+
+    return data_text
 
 def display_text(text):
     result = ""
     for word_info in text:
-        result += word_info['word'] + (" " if not word_info['isNewLine'] else "\n")
+        if word_info['isPlagiarism']:
+            result += f"[{word_info['word']}] "
+        else:
+            result += word_info['word'] + (" " if not word_info['isNewLine'] else "\n")
     return result
 
 if __name__ == "__main__":
