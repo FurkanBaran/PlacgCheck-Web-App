@@ -72,7 +72,7 @@ def display_text(text):
     result = ""
     for word_info in text:
         if word_info['isPlagiarism']:
-            result += f"<span style='color:red; font-weight:bold;'>{word_info['word']}</span>"
+            result += f"span style='color:red; font-weight:bold;'>{word_info['word']}</span>"
         else:
             result += word_info['word'] 
     return result
