@@ -72,9 +72,9 @@ def display_text(text):
     result = ""
     for word_info in text:
         if word_info['isPlagiarism']:
-            result += f"[{word_info['word']}] "
+            result += f"<span style='color:red; font-weight:bold;'>{word_info['word']}</span>"
         else:
-            result += word_info['word'] + (" " if not word_info['isNewLine'] else "\n")
+            result += word_info['word'] 
     return result
 
 if __name__ == "__main__":
