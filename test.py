@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import string
+from streamlit import components
 
 def check_plagiarism(main_text, data_text, n):
     check_text = []
@@ -73,7 +74,7 @@ def preprocess_data_text(data_text_files):
 def display_text(text):
     for word_info in text:
         if word_info['isPlagiarism']:
-            st.text(word_info['word'], key=word_info['word'], use_container_width=True, font="bold", color="red")
+            st.markdown(f"<span style='color:red; font-weight:bold;'>{word_info['word']}</span>", unsafe_allow_html=True)
         else:
             st.text(word_info['word'])
 
