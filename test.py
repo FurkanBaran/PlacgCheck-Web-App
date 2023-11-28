@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import string
 
 def check_plagiarism(main_text, data_text, n):
@@ -74,9 +75,9 @@ def main():
     if data_text_files is not None:
         data_text_data = preprocess_data_text(data_text_files)
 
+    if st.button("Check Plagiarism") and main_text_data is not None and data_text_data is not None:
         # Kontrol işlemini optimize et
-        if main_text_data is not None:
-            main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
+        main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
 
     col1, col2 = st.columns(2)
 
