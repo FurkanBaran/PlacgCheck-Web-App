@@ -1,40 +1,63 @@
 import streamlit as st
 import string
 
-def read_file(file):
-    text = file.read().decode("utf-8")
-    return [word.translate(str.maketrans('', '', string.punctuation)).lower() for word in text.split()]
+def check_plagiarism(text, db_text, n):
+    check_text = []
+    plag_count = 0
 
-def check(text, db_text, N):
-    # Implement the check function without Tkinter GUI updates.
+    for i in range(n - 1):
+        check_text.append(text[i])
 
-def search():
-    # Implement the search function without Tkinter GUI updates.
+    text_len = len(text)
+
+    for id in range(text_len - n):
+        check_text.append(text[id + n])
+        for file_id in range(len(db_text)):
+            for j in range(len(db_text[file_id]) - n):
+                if check_text == db_text[file_id][j:j + n]:
+                    for k in range(n):
+                        text[id + k]['isPlagiarism'] = True
+                        db_text[file_id][j + k]['isPlagiarism'] = 1
+        check_text.pop(0)
+
+    return text
 
 def main():
-    st.title("Plagiarism Check with Streamlit")
+    st.title("Plagiarism Checker")
 
-    text = st.file_uploader("Upload a text file", type=["txt"])
-    if text is not None:
-        text = read_file(text)
-    else:
-        st.warning("Please upload a text file.")
-        return
+    uploaded_file = st.file_uploader("Upload your text file", type=["txt"])
 
-    db_text = st.file_uploader("Upload data files", type=["txt"], accept_multiple_files=True)
-    if db_text:
-        db_text = [read_file(file) for file in db_text]
-    else:
-        st.warning("Please upload data files.")
-        return
+    if uploaded_file is not None:
+        content = uploaded_file.read().decode("utf-8")
+        st.text_area("Selected Document", content, height=300)
 
-    N = st.slider("Select Level (N)", min_value=3, max_value=7, value=3)
+        n = st.slider("Select Level (N)", min_value=3, max_value=7, value=3)
+        st.button("Check Plagiarism", on_click=lambda: check_and_display(content, n))
 
-    if st.button("Check"):
-        check(text, db_text, N)
+def check_and_display(text_content, n):
+    text = preprocess_text(text_content)
+    db_text = preprocess_db_text()  # You need to implement the function that loads your database text
 
-    if st.button("Search"):
-        search()
+    text = check_plagiarism(text, db_text, n)
+
+    st.text_area("Checked Document", display_text(text), height=300)
+
+def preprocess_text(text_content):
+    text_lines = text_content.split('\n')
+    text = []
+
+    for line in text_lines:
+        for word in line.split():
+            text.append({'word': word, 'isPlagiarism': False, 'isNewLine': True})
+            text[-1]['word'] = word.translate(str.maketrans('', '', string.punctuation)).lower()
+
+    return text
+
+def display_text(text):
+    result = ""
+    for word_info in text:
+        result += word_info['word'] + (" " if not word_info['isNewLine'] else "\n")
+    return result
 
 if __name__ == "__main__":
     main()
