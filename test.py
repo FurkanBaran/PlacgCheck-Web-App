@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import string
 
 def check_plagiarism(main_text, data_text, n):
@@ -62,22 +61,33 @@ def main():
     main_text = st.file_uploader("Upload Main Text File", type=["txt"])
     data_text_files = st.file_uploader("Upload Data Text Files", type=["txt"], accept_multiple_files=True)
 
-    if st.button("Check Plagiarism") and main_text is not None and data_text_files is not None:
-        main_text_content = main_text.read().decode("utf-8")
+    # Dosyaların içeriğini bu değişkenlerde tutalım
+    main_text_data = None
+    data_text_data = None
 
+    # Dosya seçildiyse içeriği al
+    if main_text is not None:
+        main_text_content = main_text.read().decode("utf-8")
         main_text_data = preprocess_text(main_text_content)
+
+    # Dosyalar seçildiyse içerikleri al
+    if data_text_files is not None:
         data_text_data = preprocess_data_text(data_text_files)
 
-        main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
+        # Kontrol işlemini optimize et
+        if main_text_data is not None:
+            main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
 
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-        with col1:
-            st.markdown("### Main Text")
+    with col1:
+        st.markdown("### Main Text")
+        if main_text_data:
             display_text(main_text_data)
 
-        with col2:
-            st.markdown("### Data Text")
+    with col2:
+        st.markdown("### Data Text")
+        if data_text_data:
             selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text_data))])
             display_text(data_text_data[int(selected_file.split()[-1]) - 1])
 
