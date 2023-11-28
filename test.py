@@ -31,21 +31,23 @@ def main():
 
     if main_text is not None and data_text_files is not None:
         main_text_content = main_text.read().decode("utf-8")
-        st.text_area("Main Text", main_text_content, height=300)
-
         n = st.slider("Select Level (N)", min_value=3, max_value=7, value=3)
-        st.button("Check Plagiarism", on_click=lambda: check_and_display(main_text_content, data_text_files, n))
+        
+        main_text_data = preprocess_text(main_text_content)
+        data_text_data = preprocess_data_text(data_text_files)
 
-def check_and_display(main_text_content, data_text_files, n):
-    main_text = preprocess_text(main_text_content)
-    data_text = preprocess_data_text(data_text_files)
+        main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
 
-    main_text, data_text = check_plagiarism(main_text, data_text, n)
+        col1, col2 = st.beta_columns(2)
+        
+        with col1:
+            st.markdown("### Main Text")
+            display_text(main_text_data)
 
-    st.text_area("Checked Main Text", display_text(main_text), height=300)
-
-    selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text))])
-    st.text_area(f"Checked Data Text ({selected_file})", display_text(data_text[int(selected_file.split()[-1]) - 1]), height=300)
+        with col2:
+            selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text_data))])
+            st.markdown(f"### Data Text ({selected_file})")
+            display_text(data_text_data[int(selected_file.split()[-1]) - 1])
 
 def preprocess_text(text_content):
     text_lines = text_content.split('\n')
@@ -69,13 +71,11 @@ def preprocess_data_text(data_text_files):
     return data_text
 
 def display_text(text):
-    result = ""
     for word_info in text:
         if word_info['isPlagiarism']:
-            result += f"<span style='color:red; font-weight:bold;'>{word_info['word']}</span>"
+            st.markdown(f"<font color='red'>{word_info['word']}</font> ", unsafe_allow_html=True)
         else:
-            result += word_info['word'] 
-    return result
+            st.text(word_info['word'] + (" " if not word_info['isNewLine'] else "\n"))
 
 if __name__ == "__main__":
     main()
