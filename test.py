@@ -1,10 +1,10 @@
 import streamlit as st
-import pandas as pd
 import string
+from copy import deepcopy
 
+@st.cache_data()
 def check_plagiarism(main_text, data_text, n):
     check_text = []
-    plag_count = 0
 
     for i in range(n - 1):
         check_text.append(main_text[i])
@@ -21,30 +21,9 @@ def check_plagiarism(main_text, data_text, n):
                         data_text[file_id][j + k]['isPlagiarism'] = True
         check_text.pop(0)
 
-    return main_text, data_text
+    return deepcopy(main_text), deepcopy(data_text)
 
-def main():
-    st.title("Plagiarism Checker")
-
-    main_text = st.file_uploader("Upload Main Text File", type=["txt"])
-    data_text_files = st.file_uploader("Upload Data Text Files", type=["txt"], accept_multiple_files=True)
-
-    if main_text is not None and data_text_files is not None:
-        main_text_content = main_text.read().decode("utf-8")
-        n = st.slider("Select Level (N)", min_value=3, max_value=7, value=3)
-        
-        main_text_data = preprocess_text(main_text_content)
-        data_text_data = preprocess_data_text(data_text_files)
-
-        main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
-
-        st.markdown("### Main Text")
-        display_text(main_text_data)
-
-        st.markdown("### Data Text", unsafe_allow_html=true,  help=None)
-        selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text_data))])
-        display_text(data_text_data[int(selected_file.split()[-1]) - 1])
-
+@st.cache_data()
 def preprocess_text(text_content):
     text_lines = text_content.split('\n')
     main_text = []
@@ -56,6 +35,7 @@ def preprocess_text(text_content):
 
     return main_text
 
+@st.cache_data()
 def preprocess_data_text(data_text_files):
     data_text = []
 
@@ -67,11 +47,50 @@ def preprocess_data_text(data_text_files):
     return data_text
 
 def display_text(text):
+    text_to_display = ""
     for word_info in text:
         if word_info['isPlagiarism']:
-            st.markdown(f"<font color='red'>{word_info['word']}</font> ", unsafe_allow_html=True)
+            text_to_display += f"<font color='red'>{word_info['word']}</font> "
         else:
-            st.text(word_info['word'] + (" " if not word_info['isNewLine'] else "\n"))
+            text_to_display += word_info['word'] + (" " if not word_info['isNewLine'] else "\n")
+
+    st.markdown(text_to_display, unsafe_allow_html=True)
+
+def main():
+    st.set_page_config(layout="wide")
+
+    st.title("Plagiarism Checker")
+
+    n = st.slider("Select Level (N)", min_value=3, max_value=7, value=3)
+    
+    main_text = st.file_uploader("Upload Main Text File", type=["txt"])
+    data_text_files = st.file_uploader("Upload Data Text Files", type=["txt"], accept_multiple_files=True)
+
+    main_text_data = None
+    data_text_data = None
+
+    if main_text is not None:
+        main_text_content = main_text.read().decode("utf-8")
+        main_text_data = preprocess_text(main_text_content)
+
+    if data_text_files is not None:
+        data_text_data = preprocess_data_text(data_text_files)
+
+    if main_text_data is not None and data_text_data is not None:
+        main_text_data, data_text_data = check_plagiarism(main_text_data, data_text_data, n)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("### Main Text")
+        if main_text_data:
+            display_text(main_text_data)
+
+    with col2:
+        st.markdown("### Data Text")
+        if data_text_data:
+            selected_file = st.selectbox("Select Data Text File", [f"File {i + 1}" for i in range(len(data_text_data))])
+            display_text(data_text_data[int(selected_file.split()[-1]) - 1])
 
 if __name__ == "__main__":
     main()
