@@ -2,6 +2,7 @@
 # Plagiarism Checker Web App
 
 This Flask application provides a web-based interface for plagiarism detection. It was developed upon request as a simple project to address specific needs. Users can upload a primary text file along with multiple source files. The application will compare the primary text against the sources to identify any potential plagiarism, highlighting suspected portions in red. This tool aims to offer a direct and effective way to spot similarities in textual content, tailored to educational and preliminary research contexts.
+
 **Live demo**: https://plgtest.vercel.app/
 
 ## Features
@@ -55,4 +56,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Furkan Baran - furkanbaran021@gmail.com
 ##
 Project Link: [https://github.com/FurkanBaran/PlagCheck-Web-App]
-Live demo: https://plgtest.vercel.app/
