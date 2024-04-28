@@ -15,8 +15,8 @@ This Flask application provides a web-based interface for plagiarism detection. 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/flask-plagiarism-detector.git
-   cd flask-plagiarism-detector
+   git clone https://github.com/FurkanBaran/PlagCheck-Web-App.git
+   cd PlagCheck-Web-App
 2.  **Set Up a Virtual Environment** (optional, but recommended)
      
     ``python -m venv venv
@@ -54,5 +54,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Furkan Baran - furkanbaran021@gmail.com
 ##
-Project Link: [https://github.com/FurkanBaran/PlacgCheck-Web-App]
+Project Link: [https://github.com/FurkanBaran/PlagCheck-Web-App]
 Live demo: https://plgtest.vercel.app/
