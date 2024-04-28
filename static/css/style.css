@@ -1,0 +1,71 @@
+.dropzone {
+    border: 2px dashed #aaa;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    min-height: 100px;
+    margin-bottom: 20px;
+}
+
+
+.progress {
+    display: -ms-flexbox!important;
+    display: flex!important;
+    height: 2rem!important;
+    overflow: hidden!important;
+    font-size: 1.75rem!important;
+    margin-top:10px;
+    background-color: #e9ecef!important;
+    border-radius: 0.25rem!important;
+}
+
+.progress-bar{
+    background-color: #ff4343;
+
+}
+
+
+span:target {
+    background-color: #8bff22;
+  }
+  
+  span:target::before {
+    content: "►";
+    color: red;
+    margin-right: 0.25em;
+  }
+  
+  compared-content {
+    display: none;
+  }
+  compared-content:target {
+    display: block;
+  }
+
+  #myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+    padding: 25px;
+    border-radius: 50%;
+}
+
+#myBtn:hover {
+    background-color: #333;
+}
+
+.arrow-up {
+    border: solid white;
+    border-width: 0 6px 6px 0;
+    display: inline-block;
+    padding: 5px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}

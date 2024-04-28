@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plagiarism Check App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}"> 
+    
+</head>
+<body>
+    <header class="bg-dark text-white text-center p-3">
+        <h1>Plagiarism Check App</h1>
+    </header>
+    <main class="container mt-4">
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group dropzone" id="dropzone1" ondrop="dropHandler1(event);" ondragover="dragOverHandler(event);">
+                <label for="file1">File Upload (Main File):</label>
+                <input type="file" class="form-control-file" id="file1" name="mainfile" style="display: none; " accept=".txt" >
+                <p>Drag and drop or click to upload.</p>
+                <p>Only .txt files are allowed.</p>
+            </div>
+            <div class="form-group dropzone" id="dropzone2" ondrop="dropHandler2(event);" ondragover="dragOverHandler(event);">
+                <label for="file1">Files Upload (Source Files):</label>
+                <input type="file" class="form-control-file" id="file2" name="otherfiles" style="display: none;" accept=".txt"  multiple>
+                <p>Drag and drop or click to upload.</p>
+                <p>Only .txt files are allowed.</p>
+            </div>
+            <div class="form-group ">
+                <label for="rangeInput">Select the Level:</label>
+                <input type="range" min="1" max="10" step="1" value="7" class="slider form-control-range" id="rangeInput" name="N" oninput="updateValue(this.value)">
+                <span id="rangeValue">7</span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Check</button>
+        </form>
+    </main>
+    <script src="{{url_for('static', filename='js/functions.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Check App  - Result</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body >
+    <button onclick="topFunction()" id="myBtn" title="Go to top">
+        <span class="arrow-up"></span>
+    </button>
+    <header class="bg-dark text-white text-center p-3">
+        <h1>Plagiarism Check App </h1>
+    </header>
+    <div class="container">
+        <h1 class="mt-4">Plagiarism Check App  - Result</h1>
+        <div class="progress">
+            <div class="progress-bar " role="progressbar" style="width: {{plag_ratio}}%;" aria-valuenow="{{plag_ratio}}" aria-valuemin="0" aria-valuemax="100">
+                {{plag_ratio}}%
+          </div>
+        </div>
+        <form action="/recheck" method="POST" enctype="multipart/form-data" >
+            <div class="row mt-4">
+                <div class="col-9">
+                    <input  type="range" min="1" max="10" step="1" value="3" class="slider form-control-range" id="rangeInput" name="N" oninput="updateValue(this.value)">
+                    <span id="rangeValue">3</span>
+                </div>
+                <div class="col-3">
+                    <button type="submit" class="btn btn-primary btn-block">Check Again</button>
+                </div>
+            </div>
+        </form>
+        <div class="row mt-4">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Main Text</div>
+  
+                    <div class="card-body">
+                        <h2>{{files[-1]}}</h2>
+                        {{ result[0] | safe}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        Comparing Texts
+                        <select class="float-right" onchange="location = this.value;">
+                            {% for i in  range(1, result|length) %}
+                                <option value="#compared{{i}}">{{files[i-1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="compared card-body">
+                        {% for i in range(1, result|length) %}
+                        <div id="compared{{i}}" class="compared-content">{{ result[i] | safe}}</div>
+                        {% endfor %}
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- import js-->
+<script src="{{url_for('static', filename='js/functions.js') }}"></script>
+
+
+</html>
