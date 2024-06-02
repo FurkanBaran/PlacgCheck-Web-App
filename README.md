@@ -45,6 +45,11 @@ Open a web browser and navigate to `http://127.0.0.1:5000/` to access the applic
 -   Set the N value for N-gram comparison.
 -   Submit the form to see the plagiarism detection results.
 
+## Screenshots
+![Ekran görüntüsü 2024-06-02 220520](https://github.com/FurkanBaran/PlagCheck-Web-App/assets/21145014/2bdad238-6e1a-4325-bd98-beb42605fb19)
+![Ekran görüntüsü 2024-06-02 220550](https://github.com/FurkanBaran/PlagCheck-Web-App/assets/21145014/d880b29d-93d6-4fec-a5c2-4804bf9a145c)
+![Ekran görüntüsü 2024-06-02 220635](https://github.com/FurkanBaran/PlagCheck-Web-App/assets/21145014/9ccc78e1-98ab-4966-b696-41e0e1b3edfb)
+
 
 
 ## License
