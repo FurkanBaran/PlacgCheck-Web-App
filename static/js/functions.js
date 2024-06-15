@@ -13,48 +13,48 @@ function scrollFunction() {
 }
 
 
-function updateValue(val) {
-    document.getElementById('rangeValue').innerText = val;
-}
 
 // When the user clicks on the button, scroll to the top of the document
 function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
-    window.addEventListener('hashchange', function() {
-        var hash = window.location.hash;
-        var tabNumber = hash.split('-')[0][2];
-        console.log(tabNumber)
-        console.log(hash,hash.split('-'))
-        var tabPane = document.getElementById('compared' + tabNumber);
-        if (tabNumber>= '0' && tabNumber <= '9' &&  tabPane) {
-            var tabPanes = document.querySelectorAll('.compared-content');
-            for (var i = 0; i < tabPanes.length; i++) {
-                tabPanes[i].style.display = 'none';
-            }
-            tabPane.style.display = 'block';
-        }else{
-            console.log('else')
-            var tabPanes = document.querySelectorAll('.compared-content');
 
-            for (var i = 0; i < tabPanes.length; i++) {
-                tabPanes[i].style.display = 'none';
-            }
-            var hash = window.location.hash.substring(1);
-            var tabPane = document.getElementById(hash);
-            
-            if (tabPane) {
-                tabPane.style.display = 'block';
-            } else {
-                console.error('Tab not found for hash:', hash);
-            }
+
+// show the selected word
+window.addEventListener('hashchange', function() {
+    var hash = window.location.hash;
+    var tabNumber = hash.split('-')[0][2];
+    console.log(tabNumber)
+    console.log(hash,hash.split('-'))
+    var tabPane = document.getElementById('compared' + tabNumber);
+    if (tabNumber>= '0' && tabNumber <= '9' &&  tabPane) {
+        var tabPanes = document.querySelectorAll('.compared-content');
+        for (var i = 0; i < tabPanes.length; i++) {
+            tabPanes[i].style.display = 'none';
         }
-    });
+        tabPane.style.display = 'block';
+    }else{
+        console.log('else')
+        var tabPanes = document.querySelectorAll('.compared-content');
+
+        for (var i = 0; i < tabPanes.length; i++) {
+            tabPanes[i].style.display = 'none';
+        }
+        var hash = window.location.hash.substring(1);
+        var tabPane = document.getElementById(hash);
+        
+        if (tabPane) {
+            tabPane.style.display = 'block';
+        } else {
+            console.error('Tab not found for hash:', hash);
+        }
+    }
+});
     
     
-    function updateValue(val) {
-    document.getElementById('rangeValue').innerText = val;
+function updateValue(val) {
+  document.getElementById('rangeValue').innerText = val;
 }
 
 
